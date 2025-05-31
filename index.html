@@ -4,65 +4,90 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Divy's Timetable</title>
+  <!-- Google Fonts for Modern Look -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-light: #f9fafc;
-      --bg-dark: #1e1e2f;
-      --text-light: #000;
-      --text-dark: #fff;
-      --primary: #3f51b5;
-      --primary-dark: #2c3e9e;
-      --card-light: #ffffff;
-      --card-dark: #2e2e3e;
+      --bg-dark: #181826;
+      --text-light: #222;
+      --text-dark: #f4f4f4;
+      --primary: #4f8cff;
+      --primary-dark: #2857a4;
+      --card-light: #fff;
+      --card-dark: #26263a;
+      --accent: #ffd600;
+      --shadow: 0 4px 32px rgba(80,90,140,0.07);
+      --transition: 0.3s cubic-bezier(.4,0,.2,1);
     }
 
     body {
-      font-family: 'Segoe UI', sans-serif;
+      font-family: 'Inter', 'Segoe UI', sans-serif;
       margin: 0;
-      background-color: var(--bg-light);
-      color: var(--text-light);
-      transition: 0.3s;
-    }
-
-    body.dark {
       background-color: var(--bg-dark);
       color: var(--text-dark);
+      transition: var(--transition);
+      min-height: 100vh;
+    }
+
+    body.light {
+      background-color: var(--bg-light);
+      color: var(--text-light);
     }
 
     header {
-      background: var(--primary);
-      color: white;
-      padding: 20px;
+      background: linear-gradient(90deg, var(--primary) 60%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 2rem 1rem 1.5rem 1rem;
       text-align: center;
       position: relative;
+      box-shadow: var(--shadow);
+      border-bottom-left-radius: 2rem;
+      border-bottom-right-radius: 2rem;
     }
 
     .toggle-theme {
       position: absolute;
-      top: 20px;
-      right: 20px;
-      background: #fff;
-      color: #000;
+      top: 1.5rem;
+      right: 2rem;
+      background: var(--accent);
+      color: #222;
       border: none;
-      padding: 5px 10px;
-      border-radius: 5px;
+      padding: 10px 16px;
+      border-radius: 50px;
+      font-weight: bold;
+      font-size: 1rem;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      outline: none;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5em;
+    }
+
+    .toggle-theme:hover {
+      background: #ffe066;
     }
 
     .btn-group {
       text-align: center;
-      margin: 20px 0;
+      margin: 2rem 0 1rem;
     }
 
     button {
-      padding: 10px 20px;
-      margin: 10px 5px;
+      padding: 12px 28px;
+      margin: 0.7em 0.3em;
       background: var(--primary);
-      color: white;
+      color: #fff;
       border: none;
-      border-radius: 5px;
-      font-weight: bold;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 1.07em;
       cursor: pointer;
+      box-shadow: 0 2px 8px rgba(79,140,255,0.10);
+      transition: var(--transition);
+      outline: none;
     }
 
     button:hover {
@@ -70,35 +95,47 @@
     }
 
     .timetable {
-      max-width: 800px;
-      margin: 0 auto 40px;
-      background: var(--card-light);
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      transition: 0.3s;
+      max-width: 850px;
+      margin: 0 auto 2.5rem;
+      background: var(--card-dark);
+      padding: 2rem 1.4rem 1.8rem;
+      border-radius: 1.5rem;
+      box-shadow: var(--shadow);
+      transition: var(--transition);
+      margin-top: 2rem;
+      border: 2px solid var(--primary);
     }
 
-    body.dark .timetable {
-      background: var(--card-dark);
+    body.light .timetable {
+      background: var(--card-light);
+      border: 2px solid var(--primary-dark);
     }
 
     .timetable h2 {
       text-align: center;
       color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
     }
 
     .row {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 8px 0;
-      border-bottom: 1px solid #ccc;
+      padding: 12px 0;
+      border-bottom: 1px solid #353557;
+      transition: var(--transition);
+    }
+
+    .row:last-child {
+      border-bottom: none;
     }
 
     .time {
       width: 25%;
       font-weight: bold;
+      font-size: 1.1em;
+      letter-spacing: 0.01em;
     }
 
     .activity {
@@ -106,49 +143,111 @@
     }
 
     .activity input {
-      width: 100%;
+      width: 96%;
       border: none;
       background: transparent;
       color: inherit;
-      font-size: 1em;
+      font-size: 1.07em;
+      padding: 4px 0;
+      font-family: inherit;
+      border-radius: 6px;
+      outline: 1px solid transparent;
+      transition: outline var(--transition);
+    }
+    .activity input:focus {
+      outline: 2px solid var(--primary);
+      background: #2224;
     }
 
     .check {
       width: 10%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     input[type="checkbox"] {
-      transform: scale(1.2);
+      transform: scale(1.4);
+      accent-color: var(--primary);
+      cursor: pointer;
     }
 
-    @media (max-width: 600px) {
+    /* Responsive design */
+    @media (max-width: 700px) {
+      .timetable {
+        padding: 1rem 0.3rem;
+      }
       .row {
         flex-direction: column;
         align-items: flex-start;
+        padding: 10px 0;
       }
       .time, .activity, .check {
         width: 100%;
+      }
+      .activity {
+        margin: 0.4em 0;
+      }
+    }
+
+    /* Print-friendly */
+    @media print {
+      header, .btn-group, .toggle-theme {
+        display: none !important;
+      }
+      body, .timetable {
+        background: #fff !important;
+        color: #000 !important;
+      }
+      .timetable {
+        box-shadow: none !important;
+        border: none !important;
       }
     }
   </style>
 </head>
 <body>
-
   <header>
-    <h1>📘 Divy's Timetable</h1>
-    <button class="toggle-theme" onclick="toggleTheme()">🌗 Theme</button>
-    <p>Smart Planning for Top Performance</p>
+    <h1 style="font-size:2.5rem;letter-spacing:0.03em;">📘 Divy's Timetable</h1>
+    <button class="toggle-theme" id="themeToggleBtn" aria-label="Switch Theme">
+      <span id="themeIcon">🌙</span> Theme
+    </button>
+    <p style="margin-top:0.8em;font-size:1.17em;font-weight:500;">Smart Planning for Top Performance</p>
   </header>
 
   <div class="btn-group">
     <button onclick="showTimetable('vacation')">🏖️ Vacation Mode</button>
     <button onclick="showTimetable('school')">🏫 School Mode</button>
     <button onclick="clearStorage()">🧹 Clear Progress</button>
+    <button onclick="window.print()">🖨️ Print</button>
   </div>
 
   <div class="timetable" id="timetableContainer"></div>
 
   <script>
+    // Theme handling with localStorage
+    function setTheme(theme) {
+      if (theme === 'light') {
+        document.body.classList.add('light');
+        document.getElementById('themeIcon').textContent = '☀️';
+      } else {
+        document.body.classList.remove('light');
+        document.getElementById('themeIcon').textContent = '🌙';
+      }
+      localStorage.setItem('theme', theme);
+    }
+    function toggleTheme() {
+      const theme = document.body.classList.contains('light') ? 'dark' : 'light';
+      setTheme(theme);
+    }
+    document.getElementById('themeToggleBtn').onclick = toggleTheme;
+    // On load: set theme (default dark)
+    (() => {
+      const savedTheme = localStorage.getItem('theme');
+      setTheme(savedTheme === 'light' ? 'light' : 'dark');
+    })();
+
+    // Timetable data
     const timetables = {
       vacation: [
         ["6:30 AM", "Wake up + freshen up"],
@@ -211,8 +310,8 @@
           <div class="row">
             <div class="time">${time}</div>
             <div class="activity">
-              <input type="text" value="${task}" 
-                     oninput="saveToLocalStorage('${type}', ${index}, this.value, document.getElementById('check-${type}-${index}').checked)">
+              <input type="text" value="${task.replace(/"/g, '&quot;')}" 
+                oninput="saveToLocalStorage('${type}', ${index}, this.value, document.getElementById('check-${type}-${index}').checked)">
             </div>
             <div class="check">
               <input type="checkbox" id="check-${type}-${index}" ${checked}
@@ -229,10 +328,6 @@
         localStorage.clear();
         showTimetable(currentType);
       }
-    }
-
-    function toggleTheme() {
-      document.body.classList.toggle("dark");
     }
 
     // Load vacation mode first
